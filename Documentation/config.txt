@@ -1674,6 +1674,12 @@ this configuration variable is ignored, all packs except the base pack
 will be repacked. After this the number of packs should go below
 gc.autoPackLimit and gc.bigPackThreshold should be respected again.
 
+gc.commitGraph::
+	If true, then gc will rewrite the commit-graph file after any
+	change to the object database. If '--auto' is used, then the
+	commit-graph will not be updated unless the threshold is met.
+	See linkgit:git-commit-graph[1] for details.
+
 gc.logExpiry::
 	If the file gc.log exists, then `git gc --auto` won't run
 	unless that file is more than 'gc.logExpiry' old.  Default is

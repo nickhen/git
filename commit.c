@@ -217,7 +217,7 @@ static void prepare_commit_graft(struct repository *r)
 		return;
 
 	graft_file = get_graft_file(r);
-	read_graft_file(graft_file);
+	read_graft_file(r, graft_file);
 	/* make sure shallows are read */
 	is_repository_shallow(r);
 	r->parsed_objects->commit_graft_prepared = 1;
@@ -423,7 +423,7 @@ int parse_commit_buffer(struct commit *item, const void *buffer, unsigned long s
 	return 0;
 }
 
-int parse_commit_gently(struct commit *item, int quiet_on_missing)
+int parse_commit_internal(struct commit *item, int quiet_on_missing, int use_commit_graph)
 {
 	enum object_type type;
 	void *buffer;
@@ -434,7 +434,7 @@ int parse_commit_gently(struct commit *item, int quiet_on_missing)
 		return -1;
 	if (item->object.parsed)
 		return 0;
-	if (parse_commit_in_graph(item))
+	if (use_commit_graph && parse_commit_in_graph(item))
 		return 0;
 	buffer = read_object_file(&item->object.oid, &type, &size);
 	if (!buffer)
@@ -453,6 +453,11 @@ int parse_commit_gently(struct commit *item, int quiet_on_missing)
 	}
 	free(buffer);
 	return ret;
+}
+
+int parse_commit_gently(struct commit *item, int quiet_on_missing)
+{
+	return parse_commit_internal(item, quiet_on_missing, 1);
 }
 
 void parse_commit_or_die(struct commit *item)

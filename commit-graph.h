@@ -46,11 +46,14 @@ struct commit_graph {
 
 struct commit_graph *load_commit_graph_one(const char *graph_file);
 
+void write_commit_graph_reachable(const char *obj_dir, int append);
 void write_commit_graph(const char *obj_dir,
 			const char **pack_indexes,
 			int nr_packs,
 			const char **commit_hex,
 			int nr_commits,
 			int append);
+
+int verify_commit_graph(struct commit_graph *g);
 
 #endif
