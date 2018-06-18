@@ -300,7 +300,7 @@ static int global_argc;
 static const char **global_argv;
 
 /* Memory pools */
-static struct mem_pool fi_mem_pool =  {NULL, 2*1024*1024 -
+static struct mem_pool fi_mem_pool =  {NULL, NULL, 2*1024*1024 -
 				       sizeof(struct mp_block), 0 };
 
 /* Atom management */
